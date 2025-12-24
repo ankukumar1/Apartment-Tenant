@@ -1,26 +1,124 @@
 "use client";
 
 import React from "react";
-import { Building2 } from "lucide-react";
+import {
+  Building2,
+  Users,
+  Home,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { Unit, UnitCard } from "@/components/Properties/UnitCard";
+import { PropertyFilters } from "@/components/Properties/PropertyFilters";
+import { units } from "@/components/demoData/PropertiesDemoData";
 
 export default function PropertiesPage() {
   return (
-    <>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white font-display mb-2">
-          Properties
-        </h1>
-        <p className="text-gray-400">View and manage your apartment units.</p>
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-white font-display mb-2">
+            Apartment Units
+          </h1>
+          <p className="text-gray-400">
+            Manage your property units, occupancy, and tenant details.
+          </p>
+        </div>
+        <button className="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-lg flex items-center gap-2 font-medium transition-all shadow-lg shadow-primary/20">
+          <Building2 className="w-5 h-5" />
+          Add New Unit
+        </button>
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm h-96 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Building2 className="h-8 w-8 text-gray-500" />
-          </div>
-          <p className="text-gray-400">Properties List will go here.</p>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <StatCard
+          icon={<Building2 className="w-6 h-6 text-blue-400" />}
+          label="Total Units"
+          value="42"
+          borderColor="border-blue-500/50"
+          gradient="from-blue-500/10 to-transparent"
+        />
+        <StatCard
+          icon={<Users className="w-6 h-6 text-emerald-400" />}
+          label="Occupied"
+          value="38"
+          borderColor="border-emerald-500/50"
+          gradient="from-emerald-500/10 to-transparent"
+        />
+        <StatCard
+          icon={<Home className="w-6 h-6 text-orange-400" />}
+          label="Vacant"
+          value="4"
+          borderColor="border-orange-500/50"
+          gradient="from-orange-500/10 to-transparent"
+        />
+      </div>
+
+      {/* Search & Filters */}
+      <PropertyFilters />
+
+      {/* Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {units.map((unit) => (
+          <UnitCard key={unit.id} unit={unit} />
+        ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center items-center gap-2 mt-8">
+        <button className="p-2 hover:bg-white/5 rounded-lg text-gray-400 transition-colors">
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <button className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-lg font-medium">
+          1
+        </button>
+        <button className="w-8 h-8 flex items-center justify-center hover:bg-white/5 text-gray-400 rounded-lg font-medium">
+          2
+        </button>
+        <button className="w-8 h-8 flex items-center justify-center hover:bg-white/5 text-gray-400 rounded-lg font-medium">
+          3
+        </button>
+        <span className="text-gray-500">...</span>
+        <button className="w-8 h-8 flex items-center justify-center hover:bg-white/5 text-gray-400 rounded-lg font-medium">
+          8
+        </button>
+        <button className="p-2 hover:bg-white/5 rounded-lg text-gray-400 transition-colors">
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function StatCard({ icon, label, value, borderColor, gradient }: any) {
+  return (
+    <div className="relative overflow-hidden bg-surface/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 group hover:border-white/20 transition-all duration-300">
+      <div
+        className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-${
+          borderColor.split("-")[1]
+        }-500 to-transparent opacity-50`}
+      />
+      <div className="flex items-start justify-between mb-4">
+        <div
+          className={`p-3 rounded-xl bg-white/5 ${borderColor.replace(
+            "border",
+            "text"
+          )}`}
+        >
+          {icon}
         </div>
       </div>
-    </>
+      <div className="space-y-1">
+        <p className="text-sm font-medium text-gray-400">{label}</p>
+        <h3 className="text-3xl font-bold text-white font-display mb-2">
+          {value}
+        </h3>
+      </div>
+      <div
+        className={`absolute bottom-0 left-0 w-2/3 h-full bg-gradient-to-r ${gradient} -skew-x-12 opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+      />
+    </div>
   );
 }
