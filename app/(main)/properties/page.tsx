@@ -8,6 +8,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import PropertyDetails from "@/components/Properties/PropertyDetails";
 import { UnitType } from "@/types";
 import { UnitCard } from "@/components/Properties/UnitCard";
 import { PropertyFilters } from "@/components/Properties/PropertyFilters";
@@ -16,6 +17,8 @@ import AddApartment from "@/components/Properties/AddApartment";
 
 export default function PropertiesPage() {
   const [isAdding, setIsAdding] = useState(false);
+  const [selectedUnit, setSelectedUnit] = useState<UnitType | null>(null);
+  const [editingUnit, setEditingUnit] = useState<UnitType | null>(null);
 
   if (isAdding) {
     return (
@@ -24,7 +27,34 @@ export default function PropertiesPage() {
         onSave={(data) => {
           console.log("Saved:", data);
           setIsAdding(false);
+          setEditingUnit(null);
         }}
+        initialData={
+          editingUnit
+            ? {
+                unitNumber: editingUnit.unitNumber,
+                type: editingUnit.type,
+                status: editingUnit.status,
+                rent: editingUnit.price,
+                // These fields are not in UnitType but are in the form,
+                // typically we'd fetch full details or use what we have.
+                // For demo, we'll map what we can.
+                bedrooms: 2, // Mock default
+                bathrooms: 2, // Mock default
+                size: 1100, // Mock default
+                deposit: editingUnit.price, // Mock default
+              }
+            : undefined
+        }
+      />
+    );
+  }
+
+  if (selectedUnit) {
+    return (
+      <PropertyDetails
+        unit={selectedUnit}
+        onBack={() => setSelectedUnit(null)}
       />
     );
   }
@@ -79,9 +109,17 @@ export default function PropertiesPage() {
       <PropertyFilters />
 
       {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {units.map((unit) => (
-          <UnitCard key={unit.id} unit={unit} />
+          <UnitCard
+            key={unit.id}
+            unit={unit}
+            onViewDetails={() => setSelectedUnit(unit)}
+            onEdit={() => {
+              setEditingUnit(unit);
+              setIsAdding(true);
+            }}
+          />
         ))}
       </div>
 

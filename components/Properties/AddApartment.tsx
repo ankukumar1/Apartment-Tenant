@@ -25,9 +25,14 @@ type ApartmentFormValues = z.infer<typeof apartmentSchema>;
 interface AddApartmentProps {
   onBack: () => void;
   onSave: (data: ApartmentFormValues) => void;
+  initialData?: Partial<ApartmentFormValues>;
 }
 
-export default function AddApartment({ onBack, onSave }: AddApartmentProps) {
+export default function AddApartment({
+  onBack,
+  onSave,
+  initialData,
+}: AddApartmentProps) {
   const {
     register,
     handleSubmit,
@@ -36,6 +41,7 @@ export default function AddApartment({ onBack, onSave }: AddApartmentProps) {
     resolver: zodResolver(apartmentSchema),
     defaultValues: {
       status: "Vacant",
+      ...initialData,
     },
   });
 
@@ -58,10 +64,12 @@ export default function AddApartment({ onBack, onSave }: AddApartmentProps) {
           Back to Apartments
         </button>
         <h1 className="text-3xl font-bold text-white font-display">
-          Add New Unit
+          {initialData ? "Edit Apartment Unit" : "Add New Unit"}
         </h1>
         <p className="text-gray-400 mt-2">
-          Enter details to add a new apartment unit to the property registry.
+          {initialData
+            ? "Update the details of the apartment unit."
+            : "Enter details to add a new apartment unit to the property registry."}
         </p>
       </div>
 
