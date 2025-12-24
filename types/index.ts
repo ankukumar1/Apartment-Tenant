@@ -24,3 +24,17 @@ export interface TenantType {
   leaseEnd: string;
   image: string;
 }
+
+export interface InvoiceType {
+  id: string;
+  tenant: {
+    name: string;
+    email: string;
+    image: string;
+  };
+  unit: string;
+  category: "Rent" | "Electricity" | "Maintenance";
+  dueDate: string;
+  amount: number;
+  status: "Paid" | "Pending" | "Overdue";
+}
