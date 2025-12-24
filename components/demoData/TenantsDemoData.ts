@@ -1,0 +1,48 @@
+import { TenantType } from "@/types";
+
+export const tenants: TenantType[] = [
+  {
+    id: "#T-1024",
+    name: "John Cooper",
+    email: "j.cooper@example.com",
+    phone: "+1 (555) 123-4567",
+    unit: "Unit 4B",
+    building: "Skyline Lofts",
+    status: "Active",
+    leaseEnd: "Dec 31, 2024",
+    image: "https://i.pravatar.cc/150?u=John",
+  },
+  {
+    id: "#T-1025",
+    name: "Sarah Jenkins",
+    email: "s.jenkins@example.com",
+    phone: "+1 (555) 987-6543",
+    unit: "Unit 12A",
+    building: "Sunset Gardens",
+    status: "Overdue",
+    leaseEnd: "Nov 15, 2024",
+    image: "https://i.pravatar.cc/150?u=Sarah",
+  },
+  {
+    id: "#T-1026",
+    name: "Michael Ross",
+    email: "m.ross@example.com",
+    phone: "+1 (555) 456-7890",
+    unit: "Unit 305",
+    building: "Oakwood Heights",
+    status: "Expiring Soon",
+    leaseEnd: "Aug 01, 2024",
+    image: "https://i.pravatar.cc/150?u=Michael",
+  },
+  {
+    id: "#T-1027",
+    name: "Emily Chen",
+    email: "e.chen@example.com",
+    phone: "+1 (555) 234-5678",
+    unit: "Unit 1B",
+    building: "The Plaza",
+    status: "Active",
+    leaseEnd: "Feb 28, 2025",
+    image: "https://i.pravatar.cc/150?u=Emily",
+  },
+];

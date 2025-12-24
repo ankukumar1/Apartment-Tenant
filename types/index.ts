@@ -12,3 +12,15 @@ export interface UnitType {
   } | null;
   image: string;
 }
+
+export interface TenantType {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  unit: string;
+  building: string;
+  status: "Active" | "Overdue" | "Expiring Soon";
+  leaseEnd: string;
+  image: string;
+}
