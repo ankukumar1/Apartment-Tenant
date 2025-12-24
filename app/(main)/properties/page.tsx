@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Building2,
   Users,
@@ -8,11 +8,27 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { Unit, UnitCard } from "@/components/Properties/UnitCard";
+import { UnitType } from "@/types";
+import { UnitCard } from "@/components/Properties/UnitCard";
 import { PropertyFilters } from "@/components/Properties/PropertyFilters";
 import { units } from "@/components/demoData/PropertiesDemoData";
+import AddApartment from "@/components/Properties/AddApartment";
 
 export default function PropertiesPage() {
+  const [isAdding, setIsAdding] = useState(false);
+
+  if (isAdding) {
+    return (
+      <AddApartment
+        onBack={() => setIsAdding(false)}
+        onSave={(data) => {
+          console.log("Saved:", data);
+          setIsAdding(false);
+        }}
+      />
+    );
+  }
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -25,7 +41,10 @@ export default function PropertiesPage() {
             Manage your property units, occupancy, and tenant details.
           </p>
         </div>
-        <button className="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-lg flex items-center gap-2 font-medium transition-all shadow-lg shadow-primary/20">
+        <button
+          onClick={() => setIsAdding(true)}
+          className="bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-lg flex items-center gap-2 font-medium transition-all shadow-lg shadow-primary/20"
+        >
           <Building2 className="w-5 h-5" />
           Add New Unit
         </button>

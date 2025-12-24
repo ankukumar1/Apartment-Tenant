@@ -1,6 +1,6 @@
-import { Unit } from "@/components/Properties/UnitCard";
+import { UnitType } from "@/types";
 
-export const units: Unit[] = [
+export const units: UnitType[] = [
   {
     id: "101",
     unitNumber: "Unit 101",

@@ -2,23 +2,14 @@ import React from "react";
 import { Users, Edit2 } from "lucide-react";
 import Image from "next/image";
 
-export interface Unit {
-  id: string;
-  unitNumber: string;
-  title: string;
-  type: string;
-  price: number;
-  status: "Occupied" | "Vacant" | "Maintenance";
-  tenant: {
-    name: string;
-    role: string;
-    image: string | null;
-  } | null;
-  image: string;
+import { UnitType } from "@/types";
+
+export interface UnitCardProps {
+  unit: UnitType;
 }
 
-export function UnitCard({ unit }: { unit: Unit }) {
-  const statusColors: Record<Unit["status"], string> = {
+export function UnitCard({ unit }: { unit: UnitType }) {
+  const statusColors: Record<UnitType["status"], string> = {
     Occupied: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
     Vacant: "bg-orange-500/20 text-orange-400 border-orange-500/30",
     Maintenance: "bg-gray-500/20 text-gray-400 border-gray-500/30",
