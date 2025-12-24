@@ -1,13 +1,21 @@
 import React from "react";
 import Image from "next/image";
-import { Mail, Phone, MoreVertical } from "lucide-react";
+import { Mail, Phone, MoreVertical, Edit2, Trash2, User } from "lucide-react";
 import { TenantType } from "@/types";
 
 interface TenantTableProps {
   tenants: TenantType[];
+  onEdit: (tenant: TenantType) => void;
+  onDelete: (id: string) => void;
+  onViewDetails: (tenant: TenantType) => void;
 }
 
-export function TenantTable({ tenants }: TenantTableProps) {
+export function TenantTable({
+  tenants,
+  onEdit,
+  onDelete,
+  onViewDetails,
+}: TenantTableProps) {
   return (
     <div className="bg-surface/30 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden">
       <div className="overflow-x-auto">
@@ -87,9 +95,29 @@ export function TenantTable({ tenants }: TenantTableProps) {
                   </span>
                 </td>
                 <td className="py-4 px-6 text-right">
-                  <button className="p-2 hover:bg-white/10 rounded-lg text-gray-500 hover:text-white transition-colors">
-                    <MoreVertical className="w-4 h-4" />
-                  </button>
+                  <div className="flex items-center justify-end gap-2">
+                    <button
+                      onClick={() => onViewDetails(tenant)}
+                      className="p-2 hover:bg-emerald-500/10 rounded-lg text-gray-500 hover:text-emerald-400 transition-colors"
+                      title="View Details"
+                    >
+                      <User className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => onEdit(tenant)}
+                      className="p-2 hover:bg-blue-500/10 rounded-lg text-gray-500 hover:text-blue-400 transition-colors"
+                      title="Edit Tenant"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => onDelete(tenant.id)}
+                      className="p-2 hover:bg-red-500/10 rounded-lg text-gray-500 hover:text-red-400 transition-colors"
+                      title="Delete Tenant"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

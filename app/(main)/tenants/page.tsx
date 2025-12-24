@@ -11,17 +11,50 @@ import AddTenant from "@/components/Tenants/AddTenant";
 // Mock Data
 import { tenants } from "@/components/demoData/TenantsDemoData";
 
+import TenantDetails from "@/components/Tenants/TenantDetails";
+
+// ... existing code ...
+
 export default function TenantsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isAdding, setIsAdding] = useState(false);
+  const [selectedTenant, setSelectedTenant] = useState<TenantType | null>(null);
 
   if (isAdding) {
+    // Basic mapping from TenantType to FormValues for editing
+    const initialData = selectedTenant
+      ? {
+          firstName: selectedTenant.name.split(" ")[0],
+          lastName: selectedTenant.name.split(" ")[1] || "",
+          email: selectedTenant.email,
+          phone: selectedTenant.phone,
+          unitId: selectedTenant.unit,
+        }
+      : undefined;
+
     return (
       <AddTenant
-        onBack={() => setIsAdding(false)}
+        onBack={() => {
+          setIsAdding(false);
+          // Do not clear selectedTenant so we go back to details
+        }}
         onSave={(data) => {
           console.log("Saved Tenant:", data);
           setIsAdding(false);
+        }}
+        initialData={initialData}
+      />
+    );
+  }
+
+  if (selectedTenant) {
+    return (
+      <TenantDetails
+        tenant={selectedTenant}
+        onBack={() => setSelectedTenant(null)}
+        onEdit={() => setIsAdding(true)}
+        onDelete={() => {
+          console.log("Delete", selectedTenant.id);
         }}
       />
     );
@@ -86,7 +119,23 @@ export default function TenantsPage() {
       />
 
       {/* Table */}
-      <TenantTable tenants={filteredTenants} />
+      <TenantTable
+        tenants={filteredTenants}
+        onEdit={(tenant) => {
+          console.log("Edit tenant:", tenant);
+          // Logic to open edit form would go here
+          setIsAdding(true);
+          // You would typically set an 'editingTenant' state here similar to properties
+        }}
+        onDelete={(id) => {
+          console.log("Delete tenant:", id);
+          // Logic to delete would go here
+          alert("Delete logic not implemented yet for " + id);
+        }}
+        onViewDetails={(tenant) => {
+          setSelectedTenant(tenant);
+        }}
+      />
     </div>
   );
 }

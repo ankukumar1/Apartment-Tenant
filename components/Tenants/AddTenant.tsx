@@ -24,19 +24,25 @@ type TenantFormValues = z.infer<typeof tenantSchema>;
 interface AddTenantProps {
   onBack: () => void;
   onSave: (data: TenantFormValues) => void;
+  initialData?: Partial<TenantFormValues>;
 }
 
-export default function AddTenant({ onBack, onSave }: AddTenantProps) {
+export default function AddTenant({
+  onBack,
+  onSave,
+  initialData,
+}: AddTenantProps) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     watch,
-  } = useForm({
+  } = useForm<TenantFormValues>({
     resolver: zodResolver(tenantSchema),
     defaultValues: {
       status: "Active",
-    },
+      ...initialData,
+    } as any,
   });
 
   const onSubmit = async (data: any) => {
@@ -58,7 +64,7 @@ export default function AddTenant({ onBack, onSave }: AddTenantProps) {
           Back to Tenants
         </button>
         <h1 className="text-3xl font-bold text-white font-display">
-          Add New Tenant
+          {initialData ? "Edit Tenant" : "Add New Tenant"}
         </h1>
         <p className="text-gray-400 mt-2">
           Enter tenant details, assign a unit, and upload necessary documents.
