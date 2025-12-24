@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Mail, Lock, CheckCircle2, ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { storage } from "@/utils/storage";
+import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -17,7 +18,15 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const token = storage.getToken();
+    if (token) {
+      router.push("/dashboard");
+    }
+  }, [router]);
 
   const {
     register,
@@ -38,6 +47,7 @@ export default function LoginPage() {
     storage.setUser({ email: data.email });
 
     console.log("Logged in:", data);
+    router.push("/dashboard");
     // Add real login logic here
   };
 

@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Mail, Lock, User, ArrowRight, Building } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-
 import { storage } from "@/utils/storage";
+import { useRouter } from "next/navigation";
 
 const registerSchema = z
   .object({
@@ -24,7 +24,15 @@ const registerSchema = z
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const token = storage.getToken();
+    if (token) {
+      router.push("/dashboard");
+    }
+  }, [router]);
 
   const {
     register,
@@ -45,6 +53,7 @@ export default function RegisterPage() {
     storage.setUser({ name: data.name, email: data.email });
 
     console.log("Registered:", data);
+    router.push("/dashboard");
     // Add real registration logic here
   };
 
