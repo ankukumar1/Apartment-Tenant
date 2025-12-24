@@ -24,26 +24,25 @@ export function BillingToolbar({
       </div>
       <div className="md:col-span-2">
         <select className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all appearance-none cursor-pointer">
-          <option>All Statuses</option>
-          <option>Paid</option>
-          <option>Pending</option>
-          <option>Overdue</option>
+          <option className="bg-gray-900 text-white">All Statuses</option>
+          <option className="bg-gray-900 text-white">Paid</option>
+          <option className="bg-gray-900 text-white">Pending</option>
+          <option className="bg-gray-900 text-white">Overdue</option>
         </select>
       </div>
       <div className="md:col-span-2">
         <select className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all appearance-none cursor-pointer">
-          <option>All Categories</option>
-          <option>Rent</option>
-          <option>Electricity</option>
-          <option>Maintenance</option>
+          <option className="bg-gray-900 text-white">All Categories</option>
+          <option className="bg-gray-900 text-white">Rent</option>
+          <option className="bg-gray-900 text-white">Electricity</option>
+          <option className="bg-gray-900 text-white">Maintenance</option>
         </select>
       </div>
       <div className="md:col-span-2 relative">
         <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
         <input
-          type="text"
-          placeholder="Oct 2023"
-          className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all cursor-pointer"
+          type="month"
+          className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all cursor-pointer [color-scheme:dark] [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
         />
       </div>
       <div className="md:col-span-2">

@@ -1,13 +1,21 @@
 import React from "react";
 import Image from "next/image";
-import { MoreVertical } from "lucide-react";
+import { MoreVertical, Edit2, Trash2, Eye } from "lucide-react";
 import { InvoiceType } from "@/types";
 
 interface BillingTableProps {
   invoices: InvoiceType[];
+  onView?: (invoice: InvoiceType) => void;
+  onEdit?: (invoice: InvoiceType) => void;
+  onDelete?: (id: string) => void;
 }
 
-export function BillingTable({ invoices }: BillingTableProps) {
+export function BillingTable({
+  invoices,
+  onView,
+  onEdit,
+  onDelete,
+}: BillingTableProps) {
   return (
     <div className="bg-surface/30 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden">
       <div className="overflow-x-auto">
@@ -94,9 +102,29 @@ export function BillingTable({ invoices }: BillingTableProps) {
                   <StatusBadge status={inv.status} />
                 </td>
                 <td className="py-4 px-6 text-right">
-                  <button className="p-2 hover:bg-white/10 rounded-lg text-gray-500 hover:text-white transition-colors">
-                    <MoreVertical className="w-4 h-4" />
-                  </button>
+                  <div className="flex items-center justify-end gap-2">
+                    <button
+                      onClick={() => onView?.(inv)}
+                      className="p-2 hover:bg-white/10 rounded-lg text-gray-500 hover:text-white transition-colors"
+                      title="View Details"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => onEdit?.(inv)}
+                      className="p-2 hover:bg-blue-500/10 rounded-lg text-gray-500 hover:text-blue-400 transition-colors"
+                      title="Edit Invoice"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => onDelete?.(inv.id)}
+                      className="p-2 hover:bg-red-500/10 rounded-lg text-gray-500 hover:text-red-400 transition-colors"
+                      title="Delete Invoice"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
