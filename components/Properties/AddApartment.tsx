@@ -4,10 +4,12 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { ArrowLeft, Save, X } from "lucide-react";
+import { ArrowLeft, Save, X, Upload, Image as ImageIcon } from "lucide-react";
 
 // Form Validation Schema
 const apartmentSchema = z.object({
+  coverImage: z.any().optional(),
+  plotImages: z.any().optional(),
   unitNumber: z.string().min(1, "Unit Number is required"),
   type: z.string().min(1, "Apartment Type is required"),
   bedrooms: z.coerce.number().min(0),
@@ -45,6 +47,36 @@ export default function AddApartment({
     },
   });
 
+  const [coverPreview, setCoverPreview] = React.useState<string | null>(null);
+  const [plotPreviews, setPlotPreviews] = React.useState<string[]>([]);
+
+  const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setCoverPreview(url);
+    }
+  };
+
+  const handlePlotImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      const newPreviews = Array.from(files).map((file) =>
+        URL.createObjectURL(file)
+      );
+      setPlotPreviews((prev) => [...prev, ...newPreviews]);
+    }
+  };
+
+  const removeCoverImage = () => {
+    setCoverPreview(null);
+    // You might want to reset the form field here too if strictly required
+  };
+
+  const removePlotImage = (index: number) => {
+    setPlotPreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const onSubmit = async (data: ApartmentFormValues) => {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -75,7 +107,104 @@ export default function AddApartment({
 
       {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-        {/* Basic Information */}
+        {/* Media & Photos */}
+        <div className="bg-surface/30 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-8">
+          <h2 className="text-lg font-semibold text-white mb-6">
+            Media & Photos
+          </h2>
+
+          {/* Cover Image */}
+          <div className="mb-8">
+            <label className="text-sm font-medium text-gray-300 mb-2 block">
+              Cover Image
+            </label>
+            {!coverPreview ? (
+              <div className="border-2 border-dashed border-white/10 rounded-xl p-8 text-center hover:border-primary/50 transition-colors group cursor-pointer bg-white/5 relative">
+                <input
+                  {...register("coverImage")}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    register("coverImage").onChange(e); // Propagate to hook form
+                    handleCoverImageChange(e);
+                  }}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <ImageIcon className="w-6 h-6 text-gray-400 group-hover:text-primary transition-colors" />
+                </div>
+                <p className="text-sm font-medium text-white mb-1">
+                  Upload Cover Image
+                </p>
+                <p className="text-xs text-gray-500">
+                  PNG, JPG or WEBP (max. 5MB)
+                </p>
+              </div>
+            ) : (
+              <div className="relative w-full h-64 rounded-xl overflow-hidden group border border-white/10">
+                <img
+                  src={coverPreview}
+                  alt="Cover Preview"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <button
+                    type="button"
+                    onClick={removeCoverImage}
+                    className="p-2 bg-red-500/80 text-white rounded-full hover:bg-red-600 transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Plot Images */}
+          <div>
+            <label className="text-sm font-medium text-gray-300 mb-2 block">
+              Plot Images (Multiple)
+            </label>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+              {plotPreviews.map((src, index) => (
+                <div
+                  key={index}
+                  className="relative aspect-square rounded-xl overflow-hidden group border border-white/10"
+                >
+                  <img
+                    src={src}
+                    alt={`Plot ${index}`}
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removePlotImage(index)}
+                    className="absolute top-2 right-2 p-1.5 bg-black/50 text-white rounded-full hover:bg-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+              <div className="border-2 border-dashed border-white/10 rounded-xl flex flex-col items-center justify-center aspect-square text-center hover:border-primary/50 transition-colors group cursor-pointer bg-white/5 relative">
+                <input
+                  {...register("plotImages")}
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={(e) => {
+                    register("plotImages").onChange(e);
+                    handlePlotImagesChange(e);
+                  }}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <div className="w-8 h-8 bg-white/5 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                  <Upload className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
+                </div>
+                <p className="text-xs font-medium text-white">Add Photos</p>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="bg-surface/30 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-8">
           <h2 className="text-lg font-semibold text-white mb-6">
             Basic Information

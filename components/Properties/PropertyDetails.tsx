@@ -19,11 +19,15 @@ import { UnitType } from "@/types";
 interface PropertyDetailsProps {
   unit: UnitType;
   onBack: () => void;
+  onEdit: () => void;
+  onCreateInvoice: () => void;
 }
 
 export default function PropertyDetails({
   unit,
   onBack,
+  onEdit,
+  onCreateInvoice,
 }: PropertyDetailsProps) {
   // Mock amenities data since it's not in the base type yet
   const amenities = [
@@ -35,6 +39,14 @@ export default function PropertyDetails({
     "High-speed Internet",
     "Pet Friendly",
     "Parking Spot",
+  ];
+
+  // Mock property images
+  const propertyImages = [
+    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267",
+    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688",
+    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
+    "https://images.unsplash.com/photo-1484154218962-a1c00207bf9a",
   ];
 
   return (
@@ -90,7 +102,10 @@ export default function PropertyDetails({
               ${unit.price.toLocaleString()}
               <span className="text-lg text-gray-300 font-normal">/mo</span>
             </p>
-            <button className="mt-3 flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-black font-bold rounded-xl hover:bg-gray-100 transition-colors shadow-lg">
+            <button
+              onClick={onEdit}
+              className="mt-3 flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-black font-bold rounded-xl hover:bg-gray-100 transition-colors shadow-lg"
+            >
               <Edit className="w-4 h-4" />
               Edit Property
             </button>
@@ -101,6 +116,29 @@ export default function PropertyDetails({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Details */}
         <div className="lg:col-span-2 space-y-6">
+          {/* Property Gallery */}
+          <div className="bg-surface/30 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+            <h2 className="text-xl font-bold text-white font-display mb-4">
+              Property Gallery
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {propertyImages.map((img, i) => (
+                <div
+                  key={i}
+                  className="relative aspect-square rounded-xl overflow-hidden border border-white/10 group cursor-pointer"
+                >
+                  <Image
+                    src={img}
+                    alt={`Property ${i}`}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Quick Stats */}
           <div className="grid grid-cols-3 gap-4">
             <div className="bg-surface/30 backdrop-blur-md border border-white/10 rounded-xl p-4 flex flex-col items-center justify-center text-center hover:border-white/20 transition-colors">
@@ -217,7 +255,10 @@ export default function PropertyDetails({
           <div className="bg-surface/30 backdrop-blur-md border border-white/10 rounded-2xl p-6">
             <h3 className="text-lg font-bold text-white mb-4">Quick Actions</h3>
             <div className="space-y-3">
-              <button className="w-full flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors text-left text-sm text-gray-300">
+              <button
+                onClick={onCreateInvoice}
+                className="w-full flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors text-left text-sm text-gray-300"
+              >
                 <FileText className="w-4 h-4 text-primary" />
                 <span>Create Invoice</span>
               </button>

@@ -14,13 +14,36 @@ import { UnitCard } from "@/components/Properties/UnitCard";
 import { PropertyFilters } from "@/components/Properties/PropertyFilters";
 import { units } from "@/components/demoData/PropertiesDemoData";
 import AddApartment from "@/components/Properties/AddApartment";
+import CreateInvoice from "@/components/Billing/CreateInvoice";
 
 export default function PropertiesPage() {
   const [isAdding, setIsAdding] = useState(false);
+  const [isCreatingInvoice, setIsCreatingInvoice] = useState(false);
   const [selectedUnit, setSelectedUnit] = useState<UnitType | null>(null);
   const [editingUnit, setEditingUnit] = useState<UnitType | null>(null);
 
+  if (isCreatingInvoice) {
+    return (
+      <CreateInvoice
+        onBack={() => setIsCreatingInvoice(false)}
+        onSave={(data) => {
+          console.log("Invoice Created:", data);
+          setIsCreatingInvoice(false);
+        }}
+        initialData={
+          selectedUnit
+            ? {
+                unitId: selectedUnit.unitNumber,
+                tenantId: selectedUnit.tenant?.name.toLowerCase().split(" ")[0], // Mock logic
+              }
+            : undefined
+        }
+      />
+    );
+  }
+
   if (isAdding) {
+    // ... existing isAdding logic
     return (
       <AddApartment
         onBack={() => setIsAdding(false)}
@@ -55,6 +78,11 @@ export default function PropertiesPage() {
       <PropertyDetails
         unit={selectedUnit}
         onBack={() => setSelectedUnit(null)}
+        onEdit={() => {
+          setEditingUnit(selectedUnit);
+          setIsAdding(true);
+        }}
+        onCreateInvoice={() => setIsCreatingInvoice(true)}
       />
     );
   }
