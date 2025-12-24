@@ -1,0 +1,26 @@
+"use client";
+
+import React from "react";
+import { Bell } from "lucide-react";
+
+export default function NotificationsPage() {
+  return (
+    <>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-white font-display mb-2">
+          Notifications
+        </h1>
+        <p className="text-gray-400">View system alerts and messages.</p>
+      </div>
+
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm h-96 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Bell className="h-8 w-8 text-gray-500" />
+          </div>
+          <p className="text-gray-400">Notifications list will go here.</p>
+        </div>
+      </div>
+    </>
+  );
+}

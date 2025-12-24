@@ -1,6 +1,10 @@
 export const protectedRoutes = [
   "/dashboard",
-  "/dashboard/tenants",
-  "/dashboard/billings",
-  "/dashboard/settings",
+  "/properties",
+  "/tenants",
+  "/billing",
+  "/reports",
+  "/notifications",
+  "/maintenance",
+  "/settings",
 ];
