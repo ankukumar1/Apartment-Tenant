@@ -20,15 +20,24 @@ import CreateInvoice from "@/components/Billing/CreateInvoice";
 // ... imports ...
 
 export default function BillingPage() {
+  const [invoicesList, setInvoicesList] = useState<InvoiceType[]>(invoices);
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [categoryFilter, setCategoryFilter] = useState("All");
   const [isCreating, setIsCreating] = useState(false);
 
-  const filteredInvoices = invoices.filter(
-    (inv) =>
+  const filteredInvoices = invoicesList.filter((inv) => {
+    const matchesSearch =
       inv.tenant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       inv.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      inv.unit.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      inv.unit.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesStatus = statusFilter === "All" || inv.status === statusFilter;
+    const matchesCategory =
+      categoryFilter === "All" || inv.category === categoryFilter;
+
+    return matchesSearch && matchesStatus && matchesCategory;
+  });
 
   if (isCreating) {
     return (
@@ -36,8 +45,46 @@ export default function BillingPage() {
         onBack={() => setIsCreating(false)}
         onSave={(data) => {
           console.log("Invoice created", data);
+
+          // Map mock tenant IDs to details
+          const tenantDetails: Record<
+            string,
+            { name: string; email: string; image: string }
+          > = {
+            john: {
+              name: "John Cooper",
+              email: "j.cooper@example.com",
+              image: "https://i.pravatar.cc/150?u=John",
+            },
+            sarah: {
+              name: "Sarah Jenkins",
+              email: "s.jenkins@example.com",
+              image: "https://i.pravatar.cc/150?u=Sarah",
+            },
+          };
+
+          const selectedTenant = tenantDetails[data.tenantId] || {
+            name: "Unknown Tenant",
+            email: "unknown@example.com",
+            image: "https://i.pravatar.cc/150?u=Unknown",
+          };
+
+          const newInvoice: InvoiceType = {
+            id: `INV-2023-${Math.floor(100 + Math.random() * 900)}`,
+            tenant: selectedTenant,
+            unit: `Unit ${data.unitId}`,
+            category: data.category as InvoiceType["category"],
+            dueDate: new Date(data.dueDate).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            }),
+            amount: data.amount,
+            status: "Pending", // Default to Pending for new invoices
+          };
+
+          setInvoicesList((prev) => [newInvoice, ...prev]);
           setIsCreating(false);
-          // Here you would also update the list of invoices
         }}
       />
     );
@@ -129,7 +176,14 @@ export default function BillingPage() {
       </div>
 
       {/* Toolbar */}
-      <BillingToolbar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+      <BillingToolbar
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        statusFilter={statusFilter}
+        onStatusChange={setStatusFilter}
+        categoryFilter={categoryFilter}
+        onCategoryChange={setCategoryFilter}
+      />
 
       {/* Table */}
       <BillingTable

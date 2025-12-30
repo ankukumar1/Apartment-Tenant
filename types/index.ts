@@ -33,7 +33,7 @@ export interface InvoiceType {
     image: string;
   };
   unit: string;
-  category: "Rent" | "Electricity" | "Maintenance";
+  category: "Rent" | "Electricity" | "Maintenance" | "Water" | "Other";
   dueDate: string;
   amount: number;
   status: "Paid" | "Pending" | "Overdue";

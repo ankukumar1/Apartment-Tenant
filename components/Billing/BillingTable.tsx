@@ -179,11 +179,16 @@ function CategoryBadge({ category }: { category: InvoiceType["category"] }) {
     Rent: "bg-blue-500/10 text-blue-400 border-blue-500/20",
     Electricity: "bg-purple-500/10 text-purple-400 border-purple-500/20",
     Maintenance: "bg-gray-500/10 text-gray-400 border-gray-500/20",
+    Water: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+    Other: "bg-slate-500/10 text-slate-400 border-slate-500/20",
   };
+
+  const style =
+    styles[category] || "bg-gray-500/10 text-gray-400 border-gray-500/20";
 
   return (
     <span
-      className={`px-2 py-1 rounded-md text-xs font-medium border ${styles[category]}`}
+      className={`px-2 py-1 rounded-md text-xs font-medium border ${style}`}
     >
       {category}
     </span>
